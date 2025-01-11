@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
@@ -18,60 +18,40 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f5f5f5;
+            background: #f7f9fc;
         }
 
         .login-container {
             display: flex;
             max-width: 900px;
             width: 100%;
-            background: #fff;
-            border-radius: 10px;
+            background: #ffffff;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s ease-in-out forwards;
         }
 
         .image-container {
             flex: 1;
-            background: linear-gradient(145deg, #9ecbff, #628cd1);
+            background: #eaf2f8;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 40px;
+            text-align: center;
+            border-right: 1px solid #dfe6ed;
         }
 
-        .illustration {
-            position: relative;
-            width: 100%;
-            height: 100%;
+        .image-container h2 {
+            font-size: 26px;
+            color: #4a4a4a;
+            margin-bottom: 10px;
         }
 
-        .monitor {
-            background: #2b2b35;
-            width: 70%;
-            height: 40%;
-            margin: 0 auto;
-            border-radius: 10px;
-        }
-
-        .screen {
-            background: #aac8ff;
-            width: 60%;
-            height: 25%;
-            position: absolute;
-            top: 30%;
-            left: 20%;
-            border-radius: 5px;
-        }
-
-        .keyboard {
-            background: #333333;
-            width: 80%;
-            height: 10%;
-            position: absolute;
-            bottom: 20%;
-            left: 10%;
-            border-radius: 5px;
+        .image-container p {
+            font-size: 14px;
+            color: #6c757d;
         }
 
         .form-container {
@@ -83,14 +63,14 @@
         }
 
         h1 {
-            margin: 0;
-            color: #333;
-            font-size: 24px;
+            margin: 0 0 10px;
+            color: #4a4a4a;
+            font-size: 28px;
         }
 
         p {
-            margin: 10px 0;
-            color: #666;
+            margin: 0 0 20px;
+            color: #6c757d;
         }
 
         form {
@@ -101,23 +81,26 @@
 
         label {
             font-size: 14px;
-            color: #555;
+            color: #6c757d;
         }
 
         input[type="email"],
         input[type="password"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
             font-size: 14px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
         }
 
         input[type="email"]:focus,
         input[type="password"]:focus {
             outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+            border-color: #5c9dff;
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(92, 157, 255, 0.2);
         }
 
         .checkbox-forgot {
@@ -127,53 +110,73 @@
             font-size: 14px;
         }
 
+        .checkbox-forgot a {
+            text-decoration: none;
+            color: #5c9dff;
+            transition: color 0.3s ease;
+        }
+
+        .checkbox-forgot a:hover {
+            color: #3a73d9;
+        }
+
         button {
-            padding: 10px;
-            background: #007bff;
-            color: #fff;
+            padding: 12px;
+            background: #5c9dff;
+            color: #ffffff;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
+            transition: background 0.3s ease;
         }
 
         button:hover {
-            background: #0056b3;
+            background: #3a73d9;
         }
 
         .back-link {
             display: block;
-            margin-top: 15px;
+            margin-top: 20px;
             text-align: center;
-            color: #007bff;
+            color: #5c9dff;
             text-decoration: none;
             font-size: 14px;
+            transition: color 0.3s ease;
         }
 
         .back-link:hover {
-            text-decoration: underline;
+            color: #3a73d9;
         }
 
         .error-message {
-            color: red;
+            color: #e74c3c;
             text-align: center;
             margin-bottom: 15px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="image-container">
-            <div class="illustration">
-                <div class="monitor"></div>
-                <div class="keyboard"></div>
-                <div class="screen"></div>
+            <div>
+                <h2>Welcome Back</h2>
+                <p>Access your account securely and effortlessly.</p>
             </div>
         </div>
         <div class="form-container">
-            <h1>Welcome back, User</h1>
-            <p>Welcome back! Please enter your details.</p>
-            
+            <h1>Log In</h1>
+            <p>Please enter your credentials to proceed.</p>
+
             <% 
                 String error = request.getParameter("error");
                 if ("invalid".equals(error)) {
@@ -182,23 +185,24 @@
             <% 
                 }
             %>
-            
+
             <form action="SchoolController" method="POST">
-                <label for="email">Email</label>
+                <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" required placeholder="Enter your email">
-                
+
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required placeholder="Enter your password">
-                
+
                 <div class="checkbox-forgot">
-                    <input type="checkbox" id="terms" name="terms">
-                    <label for="terms">Terms & Conditions</label>
-                    <a href="#">Forgot Password</a>
+                    <label>
+                        <input type="checkbox" id="terms" name="terms"> Remember me
+                    </label>
+                    <a href="#">Forgot Password?</a>
                 </div>
-                
+
                 <button type="submit">Log in</button>
             </form>
-            <a href="#" class="back-link">back to the homepage</a>
+            <a href="#" class="back-link">Back to Homepage</a>
         </div>
     </div>
 </body>
