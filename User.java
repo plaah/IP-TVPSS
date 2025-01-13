@@ -1,11 +1,31 @@
 package com.example.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public class User {
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+
+@Entity
+@Table(name = "users")
+public class User implements UserDetails, Serializable { // Tambahkan Serializable
+    private static final long serialVersionUID = 1L; // Deklarasikan serialVersionUID
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "authority_id", nullable = false)
     private Authority authority; // Role pengguna
 
     // Constructor
@@ -15,7 +35,20 @@ public class User {
         this.authority = authority;
     }
 
+    // Default constructor required by JPA
+    public User() {
+    }
+
     // Getter dan Setter
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
     public String getUsername() {
         return username;
     }
@@ -24,6 +57,7 @@ public class User {
         this.username = username;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -44,7 +78,8 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
+                "id=" + id +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", authority=" + authority +
                 '}';
@@ -54,38 +89,30 @@ public class User {
         return this.authority != null && this.authority.getRole().equalsIgnoreCase(role);
     }
 
-    // Static method to initialize example users
-    public static List<User> initializeUsers() {
-        // Authority Definitions
-        Authority adminAuthority = new Authority("ADMIN", "Administrator of the system");
-        Authority schoolAuthority = new Authority("SCHOOL", "School management user");
-        Authority studentAuthority = new Authority("STUDENT", "Regular student user");
-
-        // User Definitions
-        List<User> users = new ArrayList<>();
-        users.add(new User("admin", "admin123", adminAuthority));
-        users.add(new User("school", "school123", schoolAuthority));
-        users.add(new User("student", "student123", studentAuthority));
-
-        return users;
+    // Implementasi metode dari UserDetails
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Konversi role dari Authority ke GrantedAuthority
+        return Collections.singleton(new SimpleGrantedAuthority(authority.getRole()));
     }
 
-    // Main method for testing
-    public static void main(String[] args) {
-        // Initialize users
-        List<User> users = User.initializeUsers();
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // Sesuaikan dengan kebutuhan
+    }
 
-        // Print all users
-        System.out.println("Initialized Users:");
-        for (User user : users) {
-            System.out.println(user);
-        }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // Sesuaikan dengan kebutuhan
+    }
 
-        // Role Verification
-        System.out.println("\nRole Verifications:");
-        for (User user : users) {
-            System.out.println(user.getUsername() + " is " + user.getAuthority().getRole() + ": " +
-                    user.hasRole(user.getAuthority().getRole()));
-        }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // Sesuaikan dengan kebutuhan
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // Sesuaikan dengan kebutuhan
     }
 }
